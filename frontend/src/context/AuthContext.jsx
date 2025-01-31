@@ -23,10 +23,12 @@ const AuthContext = ({ children }) => {
           }
         } else {
           setUser(null);
+          setLoading(false);
         }
       } catch (error) {
         if (!error?.response?.data?.success) {
           setUser(null);
+          setLoading(false);
         }
       } finally {
         setLoading(false);
