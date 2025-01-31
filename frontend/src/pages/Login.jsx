@@ -1,9 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import axios from "axios";
+import { useAuth } from "../context/AuthContext";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,9 +20,23 @@ const Login = () => {
           password,
         }
       );
-      const data = await response.json();
+      if (response?.data?.success) {
+        login(response?.data?.user);
+        localStorage.setItem("token", response?.data?.token);
+        if (response?.data?.user?.role === "admin") {
+          navigate("/admin-dashboard");
+        } else {
+          navigate("/employee-dashboard");
+        }
+      }
+      setEmail("");
+      setPassword("");
     } catch (error) {
-      console.log(error);
+      if (!error?.response?.data?.success) {
+        setError(error?.response?.data?.error);
+      } else {
+        setError("Server error");
+      }
     }
   };
   return (
@@ -25,9 +44,11 @@ const Login = () => {
       <h1 className="font-[Pacifico] text-3xl text-white">
         Employee Management System
       </h1>
+
       <div className="border shadow p-6 w-80 bg-white">
         <form onSubmit={handleSubmit}>
           <h2 className="text-2xl font-bold mb-4">Login</h2>
+          {error && <p className="text-red-500">{error}</p>}
           <div className="mb-4">
             <label htmlFor="email" className="text-block bg-white">
               Email
