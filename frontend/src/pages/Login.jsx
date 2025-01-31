@@ -40,7 +40,7 @@ const Login = () => {
     }
   };
   return (
-    <div className="flex flex-col items-center justify-center h-screen justify-center bg-gradient-to-b from-teal-600 from-50% to-gray-100 to-50% space-y-6">
+    <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-b from-teal-600 from-50% to-gray-100 to-50% space-y-6">
       <h1 className="font-[Pacifico] text-3xl text-white">
         Employee Management System
       </h1>
